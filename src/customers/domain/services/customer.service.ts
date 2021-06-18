@@ -11,30 +11,30 @@ export class CustomerService {
 
   constructor(
     @InjectRepository(Customer)
-    private userRepository: Repository<Customer>,
+    private customerRepository: Repository<Customer>,
   ) { }
 
   async create(createCustomerDto: CreateCustomerDto) {
-    const CustomerAlreadyExisits: Customer = await this.userRepository.findOne({ where: { email: createCustomerDto.email } });
+    const CustomerAlreadyExisits: Customer = await this.customerRepository.findOne({ where: { email: createCustomerDto.email } });
 
     if (CustomerAlreadyExisits) {
       throw new HttpException("Customer already exists!", HttpStatus.NOT_ACCEPTABLE);
     }
 
-    const customer: Customer = await this.userRepository.save(createCustomerDto);
+    const customer: Customer = await this.customerRepository.save(createCustomerDto);
 
     return customer;
   }
 
   findAll() {
-    return this.userRepository.find();
+    return this.customerRepository.find();
   }
 
   async findOne(customer_id: string) {
 
     const mongoId = new ObjectID(customer_id);
 
-    const customer: Customer = await this.userRepository.findOne({ where: { _id: mongoId } });
+    const customer: Customer = await this.customerRepository.findOne({ where: { _id: mongoId } });
 
     if (!customer) {
       throw new HttpException("Customer Not Found!", HttpStatus.NOT_FOUND);
@@ -46,7 +46,7 @@ export class CustomerService {
   async update(customer_id: string, updateCustomerDto: UpdateCustomerDto) {
     const mongoId = new ObjectID(customer_id);
 
-    const customer: Customer = await this.userRepository.findOne({ where: { _id: mongoId } });
+    const customer: Customer = await this.customerRepository.findOne({ where: { _id: mongoId } });
 
     if (!customer) {
       throw new HttpException("Customer Not Found!", HttpStatus.NOT_FOUND);
@@ -55,19 +55,19 @@ export class CustomerService {
     customer.email = updateCustomerDto.email;
     customer.name = updateCustomerDto.name;
 
-    await this.userRepository.update(mongoId, customer);
+    await this.customerRepository.update(mongoId, customer);
 
     return customer;
   }
 
   async remove(customer_id: String) {
     const mongoId = new ObjectID(customer_id);
-    const customer: Customer = await this.userRepository.findOne({ where: { _id: mongoId } });
+    const customer: Customer = await this.customerRepository.findOne({ where: { _id: mongoId } });
 
     if (!customer) {
       throw new HttpException("Customer Not Found!", HttpStatus.NOT_FOUND);
     }
 
-    return this.userRepository.remove(customer);
+    return this.customerRepository.remove(customer);
   }
 }

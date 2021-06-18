@@ -1,45 +1,49 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, UseGuards } from '@nestjs/common';
 import { ProductService } from '../../../domain/services/product.service';
 import { CreateProductDto } from '../../../domain/dto/create-product.dto';
-import { UpdateProductDto } from '../../../domain/dto/update-product.dto';
 import { JwtAuthGuard } from '../../../../auth/guards/jwt-auth.guard';
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { Product } from '../../../domain/entities/product.entity';
 
 @ApiTags("Customers")
-@Controller('/customers/:customer_id/favorite-products')
+@Controller('/customers')
 export class ProductsController {
-  constructor(private readonly customerService: ProductService) { }
+  constructor(
+    private readonly customerService: ProductService,
+  ) { }
 
   @UseGuards(JwtAuthGuard)
-  @Post()
   @ApiCreatedResponse(
     {
       type: CreateProductDto,
-      description: "Solution was created successfull."
+      description: "Product was added to favorite list successfull."
     }
   )
   @ApiUnauthorizedResponse()
-  create(@Body() createSolutionDto: CreateProductDto) {
-    return this.customerService.create(createSolutionDto);
+  @Post('/:customer_id/favorite-products')
+  async create(
+    @Param('customer_id') customer_id: string,
+    @Body() createProductDto: CreateProductDto
+  ) {
+    return this.customerService.create(customer_id, createProductDto);
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get()
   @ApiOkResponse({ type: [Product] })
   @ApiOperation({ description: "List all customers", summary: "List all customers" })
-  findAll(@Query() query: Object) {
+  @Get('/:customer_id/favorite-products')
+  findAll(@Param('customer_id') customer_id: string) {
     return this.customerService.findAll();
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.customerService.findOne({ where: { _id: id } });
+  @Get('/:customer_id/favorite-products/:product_id')
+  findOne(@Param('customer_id') customer_id: string) {
+    return this.customerService.findOne({ where: { _id: customer_id } });
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.customerService.remove(+id);
+  @Delete('/:customer_id/favorite-products/:product_id')
+  remove(@Param('customer_id') customer_id: string) {
+    return this.customerService.remove(customer_id);
   }
 }

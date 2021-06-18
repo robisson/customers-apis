@@ -4,13 +4,16 @@ import { Entity, ObjectID, ObjectIdColumn, Column, CreateDateColumn, UpdateDateC
 export class Product {
     @ObjectIdColumn()
     product_id: ObjectID;
-    
-    
-    customer_id: ObjectID;
+
+    @Column()
+    product_catalog_id: string;
+
+    @Column()
+    customer_id: string;
 
     @Column()
     price: number;
-    
+
     @Column()
     image: String;
 
