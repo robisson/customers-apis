@@ -10,6 +10,12 @@ Open source service api to manage customers and favorite produtcs.
 * REST Api
 * MongoDB
 
+**Concepts used**
+* Apis Restful
+* Hexagonal Architecture
+* DDD (some build blocks)
+* Units tests
+
 **Deplyoment models**
 * Docker + Kubernetes
 * Docker + Kubernetes Istio Service Mesh
