@@ -1,3 +1,4 @@
+import { HealthCheckService, HttpHealthIndicator } from '@nestjs/terminus';
 import { Test, TestingModule } from '@nestjs/testing';
 import { HealthController } from './health.controller';
 
@@ -7,6 +8,26 @@ describe('HealthController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [HealthController],
+      providers: [
+        {
+          provide: HealthCheckService,
+          useValue: {
+            check: () => {
+
+            },
+
+          }
+        },
+        {
+          provide: HttpHealthIndicator,
+          useValue: {
+            pingCheck: () => {
+
+            },
+
+          }
+        }
+      ]
     }).compile();
 
     controller = module.get<HealthController>(HealthController);

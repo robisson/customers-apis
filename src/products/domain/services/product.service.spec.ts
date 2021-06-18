@@ -1,71 +1,61 @@
 import { Test } from '@nestjs/testing';
-import { CustomerService } from './customer.service';
+import { ProductService } from './product.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { CreateCustomerDto } from '../dto/create-customer.dto';
+import { CreateProductDto } from '../dto/create-product.dto';
 import { ObjectID } from 'mongodb';
-import { Customer } from '../entities/customer.entity';
+import { Product } from '../entities/product.entity';
 
-describe('Customer Service', () => {
-  let customerService: CustomerService;
+describe('Product Service', () => {
+  let productService: ProductService;
   let findOne: () => {} = jest.fn();
   let find: () => {} = jest.fn();
-  let createCustomerDto: CreateCustomerDto = {
-    big_picture: "url_image",
-    customer: "customer",
-    description: "desccription",
-    market: "market",
-    name: "name",
-    project: "project",
-    tags: "tags",
-    team_members: "teams",
-    year_month: "10/2020"
+  let createProductDto: CreateProductDto = {
+    price: 100,
+    brand: "teste",
+    image: "teste",
+    title: "teste",
+    reviewScore: 0,
   }
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       providers: [
-        CustomerService,
+        ProductService,
         {
-          provide: getRepositoryToken(Customer),
+          provide: getRepositoryToken(Product),
           useValue: {
-            save: () => ({ ...createCustomerDto, customer_id: new ObjectID() }),
+            save: () => ({ ...createProductDto, customer_id: new ObjectID() }),
             findOne,
             find
-          }
-        },
-        {
-          provide: getRepositoryToken(Customer),
-          useValue: {
-            save: () => jest.fn()
           }
         }
       ],
     })
       .compile();
 
-    customerService = await module.get(CustomerService);
+    productService = await module.get(ProductService);
   })
 
-  it('create method should return Customer object', async () => {
+  it('create method should return Product object', async () => {
 
 
-    let customer: Customer = await customerService.create(createCustomerDto);
+    let customer: Product = await productService.create(createProductDto);
 
-    expect(customer).toMatchObject(createCustomerDto);
+    expect(customer).toMatchObject(createProductDto);
 
   })
 
-  it('findOne method should call findOne in the CustomerRepository', async () => {
+  it('findOne method should call findOne in the ProductRepository', async () => {
 
-    await customerService.findOne({});
+    await productService.findOne({});
 
     expect(findOne).toBeCalled();
 
   })
-  
-  it('findAll method should call find in the CustomerRepository', async () => {
 
-    await customerService.findAll();
+  it('findAll method should call find in the ProductRepository', async () => {
+
+    await productService.findAll();
 
     expect(find).toBeCalled();
 

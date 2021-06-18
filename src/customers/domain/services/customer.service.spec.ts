@@ -22,14 +22,11 @@ describe('Customer Service', () => {
           provide: getRepositoryToken(Customer),
           useValue: {
             save: () => ({ ...createCustomerDto, customer_id: new ObjectID() }),
-            findOne,
+            findOne: () => {
+              findOne();
+              return new Customer();
+            },
             find
-          }
-        },
-        {
-          provide: getRepositoryToken(Customer),
-          useValue: {
-            save: () => jest.fn()
           }
         }
       ],
@@ -40,27 +37,20 @@ describe('Customer Service', () => {
   })
 
   it('create method should return Customer object', async () => {
-
-
     let customer: Customer = await customerService.create(createCustomerDto);
 
     expect(customer).toMatchObject(createCustomerDto);
-
   })
 
   it('findOne method should call findOne in the CustomerRepository', async () => {
-
-    await customerService.findOne({});
+    await customerService.findOne(new ObjectID());
 
     expect(findOne).toBeCalled();
-
   })
   
   it('findAll method should call find in the CustomerRepository', async () => {
-
     await customerService.findAll();
 
     expect(find).toBeCalled();
-
   })
 });
