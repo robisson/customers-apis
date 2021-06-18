@@ -1,9 +1,10 @@
 import { Controller, Get, Post, Body, Param, Delete, UseGuards, Query, DefaultValuePipe } from '@nestjs/common';
 import { ProductService } from '../../../domain/services/product.service';
-import { CreateProductDto } from '../../../domain/dto/create-product.dto';
+import { CreateProductDto } from '../../dto/create-product.dto';
 import { JwtAuthGuard } from '../../../../auth/guards/jwt-auth.guard';
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
-import { Product } from '../../../domain/entities/product.entity';
+import { ProductResponseDto } from '../../dto/product-response.dto';
+import { ProductMapper } from '../../product-mapper';
 
 @ApiTags("Customers")
 @Controller('/customers')
@@ -15,7 +16,7 @@ export class ProductsController {
   @UseGuards(JwtAuthGuard)
   @ApiCreatedResponse(
     {
-      type: CreateProductDto,
+      type: ProductResponseDto,
       description: "Product was added to favorite list successfull."
     }
   )
@@ -25,29 +26,53 @@ export class ProductsController {
     @Param('customer_id') customer_id: string,
     @Body() createProductDto: CreateProductDto
   ) {
-    return this.customerService.create(customer_id, createProductDto);
+
+    const product: ProductResponseDto = ProductMapper.entityToProduct(
+      await this.customerService.create(customer_id, createProductDto)
+    );
+
+    return product;
   }
 
   @UseGuards(JwtAuthGuard)
-  @ApiOkResponse({ type: [Product] })
+  @ApiOkResponse({ type: [ProductResponseDto] })
   @ApiOperation({ description: "List all customers", summary: "List all customers" })
   @Get('/:customer_id/favorite-products')
-  findAll(
+  async findAll(
     @Param('customer_id') customer_id: string,
     @Query('page', new DefaultValuePipe(1)) page: string,
     @Query('limit', new DefaultValuePipe(10)) limit: string,
   ) {
-    
-    return this.customerService.findAll(customer_id, page, limit);
+
+    const {
+      data,
+      total,
+      page: pageLimit
+    } = await this.customerService.findAll(customer_id, page, limit)
+
+    const products: ProductResponseDto[] = ProductMapper.entityToProductBatch(data);
+
+    return {
+      data: products,
+      total,
+      page: pageLimit
+    };
   }
 
   @UseGuards(JwtAuthGuard)
+  @ApiOkResponse({ type: [ProductResponseDto] })
+  @ApiOperation({ description: "Return a product", summary: "Return a product" })
   @Get('/:customer_id/favorite-products/:product_id')
-  findOne(
+  async findOne(
     @Param('customer_id') customer_id: string,
     @Param('product_id') product_id: string
   ) {
-    return this.customerService.findOne(customer_id, product_id);
+
+    const product: ProductResponseDto = ProductMapper.entityToProduct(
+      await this.customerService.findOne(customer_id, product_id)
+    );
+
+    return product;
   }
 
   @Delete('/:customer_id/favorite-products/:product_id')

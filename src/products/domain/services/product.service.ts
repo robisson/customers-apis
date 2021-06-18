@@ -4,7 +4,7 @@ import { ProductCatalogService } from '../../infrastructure/client/http/luiza-la
 import { ProductDto } from '../../infrastructure/client/http/luiza-labs/product.dto';
 import { Repository } from 'typeorm';
 import { ObjectID } from 'mongodb';
-import { CreateProductDto } from '../dto/create-product.dto';
+import { CreateProductDto } from '../../application/dto/create-product.dto';
 import { Product } from '../entities/product.entity';
 import { Customer } from '../../../customers/domain/entities/customer.entity';
 
@@ -60,6 +60,7 @@ export class ProductService {
     favoriteProduct.product_catalog_id = product.id;
     favoriteProduct.image = product.image;
     favoriteProduct.title = product.title;
+    favoriteProduct.price = product.price;
     favoriteProduct.reviewScore = product.reviewScore;
 
     return favoriteProduct;
