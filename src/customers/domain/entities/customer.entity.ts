@@ -1,5 +1,4 @@
-import { Entity, ObjectID, ObjectIdColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
-import { ApiProperty } from "@nestjs/swagger";
+import { Entity, ObjectID, ObjectIdColumn, Column, CreateDateColumn, UpdateDateColumn, Index } from "typeorm";
 
 @Entity({ name: 'customers' })
 export class Customer {
@@ -10,6 +9,7 @@ export class Customer {
     name: String;
 
     @Column({ unique: true })
+    @Index({ unique: true })
     email: String;
 
     @CreateDateColumn()
