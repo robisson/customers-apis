@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, UseGuards, Query, DefaultValuePipe } from '@nestjs/common';
 import { ProductService } from '../../../domain/services/product.service';
 import { CreateProductDto } from '../../../domain/dto/create-product.dto';
 import { JwtAuthGuard } from '../../../../auth/guards/jwt-auth.guard';
@@ -32,8 +32,13 @@ export class ProductsController {
   @ApiOkResponse({ type: [Product] })
   @ApiOperation({ description: "List all customers", summary: "List all customers" })
   @Get('/:customer_id/favorite-products')
-  findAll(@Param('customer_id') customer_id: string) {
-    return this.customerService.findAll(customer_id);
+  findAll(
+    @Param('customer_id') customer_id: string,
+    @Query('page', new DefaultValuePipe(1)) page: string,
+    @Query('limit', new DefaultValuePipe(10)) limit: string,
+  ) {
+    
+    return this.customerService.findAll(customer_id, page, limit);
   }
 
   @UseGuards(JwtAuthGuard)

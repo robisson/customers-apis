@@ -65,7 +65,7 @@ export class ProductService {
     return favoriteProduct;
   }
 
-  async findAll(customer_id: string) {
+  async findAll(customer_id: string, page: string, limit: string) {
 
     if (! await this.customerExists(customer_id)) {
       throw new HttpException("Customer not found!", HttpStatus.NOT_FOUND);
@@ -74,10 +74,18 @@ export class ProductService {
     const condition = {
       where: {
         customer_id: new ObjectID(customer_id),
-      }
+      },
+      take: parseInt(limit),
+      skip: parseInt(page) - 1
     };
 
-    return this.productRepository.find(condition);
+    const [result, total] = await this.productRepository.findAndCount(condition);
+
+    return {
+      data: result,
+      total,
+      page: parseInt(page)
+    }
   }
 
   async findOne(customer_id: string, product_id: string) {
