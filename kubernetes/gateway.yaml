@@ -8,7 +8,7 @@ spec:
     istio: ingressgateway
   servers:
   - hosts:
-    - api.ac.io
+    - api.customers.io
     port:
       name: http
       number: 80

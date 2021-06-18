@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
         - name: customers-backend-ms
-          image: ms.io:5000/customers/backend:1.0.2
+          image: ms.io:5000/customers/backend:0.0.1
           imagePullPolicy: Always
           ports:
             - containerPort: 80
