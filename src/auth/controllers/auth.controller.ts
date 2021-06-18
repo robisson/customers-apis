@@ -11,7 +11,10 @@ export class AuthController {
   constructor(private authService: AuthService) { }
 
   @UseGuards(LocalAuthGuard)
-  @ApiOperation({ description: "The only purpouse of this api is to simulate oauth2 grant type resource owner password flow" })
+  @ApiOperation({
+    description: "The only purpouse of this api is to simulate oauth2 grant type resource owner password flow",
+    summary: "Generate access_token"
+  })
   @Post('oauth2/token')
   @HttpCode(HttpStatus.OK)
   async login(@Request() req) {
@@ -22,7 +25,10 @@ export class AuthController {
   }
 
   @Post('oauth2/register')
-  @ApiOperation({ description: "The only purpouse of this api is to simulate oauth2 dynamic register" })
+  @ApiOperation({ 
+    description: "The only purpouse of this api is to simulate oauth2 dynamic register" ,
+    summary: "Create a user to generate access_token and call apis"
+  })
   @HttpCode(HttpStatus.CREATED)
   async registerUser(@Body() userDto: UserDto) {
     const result: User | String = await this.authService.registerUser(userDto);

@@ -21,6 +21,8 @@ export class ProductsController {
     }
   )
   @ApiUnauthorizedResponse()
+  @ApiOkResponse({ type: ProductResponseDto })
+  @ApiOperation({ description: "Add a product to favorite list of the customer", summary: "Add a product to favorite list of the customer" })
   @Post('/:customer_id/favorite-products')
   async create(
     @Param('customer_id') customer_id: string,
@@ -36,7 +38,7 @@ export class ProductsController {
 
   @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: [ProductResponseDto] })
-  @ApiOperation({ description: "List all customers", summary: "List all customers" })
+  @ApiOperation({ description: "List all favorite products of the customer", summary: "List all favorite products of the customer" })
   @Get('/:customer_id/favorite-products')
   async findAll(
     @Param('customer_id') customer_id: string,
@@ -61,7 +63,7 @@ export class ProductsController {
 
   @UseGuards(JwtAuthGuard)
   @ApiOkResponse({ type: [ProductResponseDto] })
-  @ApiOperation({ description: "Return a product", summary: "Return a product" })
+  @ApiOperation({ description: "Return a product", summary: "Return a product from favorite list" })
   @Get('/:customer_id/favorite-products/:product_id')
   async findOne(
     @Param('customer_id') customer_id: string,
@@ -76,6 +78,8 @@ export class ProductsController {
   }
 
   @Delete('/:customer_id/favorite-products/:product_id')
+  @ApiOkResponse()
+  @ApiOperation({ description: "Delete a product", summary: "Delete a product from favorite list" })
   remove(
     @Param('customer_id') customer_id: string,
     @Param('product_id') product_id: string

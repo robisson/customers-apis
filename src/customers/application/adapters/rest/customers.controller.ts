@@ -35,6 +35,8 @@ export class CustomersController {
 
   @UseGuards(JwtAuthGuard)
   @Get(':customer_id')
+  @ApiOkResponse({ type: Customer })
+  @ApiOperation({ description: "Return a customer", summary: "Return a customer" })
   findOne(@Param('customer_id') customer_id: string) {
 
     if (customer_id.length !== 24) {
@@ -45,6 +47,8 @@ export class CustomersController {
   }
 
   @Put(':customer_id')
+  @ApiOkResponse({ type: Customer })
+  @ApiOperation({ description: "Update a customer", summary: "Update a customer" })
   update(@Param('customer_id') customer_id: string, @Body() updateSolutionDto: CreateCustomerDto) {
 
     if (customer_id.length !== 24) {
@@ -55,6 +59,8 @@ export class CustomersController {
   }
 
   @Patch(':customer_id')
+  @ApiOkResponse({ type: Customer })
+  @ApiOperation({ description: "Update partial a customer", summary: "Update partial a customer" })
   partialUpdate(@Param('customer_id') customer_id: string, @Body() updateSolutionDto: UpdateCustomerDto) {
 
     if (customer_id.length !== 24) {
@@ -65,6 +71,8 @@ export class CustomersController {
   }
 
   @Delete(':customer_id')
+  @ApiOkResponse()
+  @ApiOperation({ description: "Delete a customer", summary: "Delete a customer" })
   async remove(@Param('customer_id') customer_id: string) {
     if (customer_id.length !== 24) {
       throw new HttpException("The customer_id must be a tring of 24 characteres", HttpStatus.NOT_ACCEPTABLE);
