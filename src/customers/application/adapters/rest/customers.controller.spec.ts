@@ -14,7 +14,9 @@ describe('CustomersController', () => {
         CustomerService,
         {
           provide: getRepositoryToken(Customer),
-          useValue: {}
+          useValue: {
+            
+          }
         }
       ],
     }).compile();
