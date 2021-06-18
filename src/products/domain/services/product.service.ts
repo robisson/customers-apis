@@ -65,8 +65,19 @@ export class ProductService {
     return favoriteProduct;
   }
 
-  findAll() {
-    return this.productRepository.find();
+  async findAll(customer_id: string) {
+
+    if (! await this.customerExists(customer_id)) {
+      throw new HttpException("Customer not found!", HttpStatus.NOT_FOUND);
+    }
+
+    const condition = {
+      where: {
+        customer_id: new ObjectID(customer_id),
+      }
+    };
+
+    return this.productRepository.find(condition);
   }
 
   async findOne(customer_id: string, product_id: string) {

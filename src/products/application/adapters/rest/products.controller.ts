@@ -33,7 +33,7 @@ export class ProductsController {
   @ApiOperation({ description: "List all customers", summary: "List all customers" })
   @Get('/:customer_id/favorite-products')
   findAll(@Param('customer_id') customer_id: string) {
-    return this.customerService.findAll();
+    return this.customerService.findAll(customer_id);
   }
 
   @UseGuards(JwtAuthGuard)
