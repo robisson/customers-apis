@@ -1,6 +1,6 @@
 # Customers and favorite products
 
-Open source service api to manage customers and favorite produtcs.
+Open source service api to manage customers and favorite products.
 
 **Made with**
 * Node 14.5.0
@@ -78,4 +78,4 @@ yarn start
 
 For simulation purposes I created a very simple api that simulates the flow of `oauth 2.0 resource owner password` grant type.
 
-For a production use case I would recommend using an external identity manager with oauth 2.0 and for a usuatio use case the `oauth 2.0 authorizarion code` flow and for the application case the `oauth 2.0 client credentials` flow
+For a production use case I would recommend using an external identity manager with oauth 2.0 and for a user use case the `oauth 2.0 authorizarion code` flow and for the application case the `oauth 2.0 client credentials` flow
