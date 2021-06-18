@@ -1,12 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ProductCatalogService } from 'src/products/infrastructure/client/http/luiza-labs/product-catalog.service';
-import { ProductDto } from 'src/products/infrastructure/client/http/luiza-labs/product.dto';
+import { ProductCatalogService } from '../../infrastructure/client/http/luiza-labs/product-catalog.service';
+import { ProductDto } from '../../infrastructure/client/http/luiza-labs/product.dto';
 import { Repository } from 'typeorm';
 import { ObjectID } from 'mongodb';
 import { CreateProductDto } from '../dto/create-product.dto';
 import { Product } from '../entities/product.entity';
-import { Customer } from 'src/customers/domain/entities/customer.entity';
+import { Customer } from '../../../customers/domain/entities/customer.entity';
 
 @Injectable()
 export class ProductService {
