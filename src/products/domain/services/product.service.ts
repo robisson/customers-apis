@@ -30,7 +30,8 @@ export class ProductService {
   }
 
   async customerExists(customer_id) {
-    const customer: Customer = await this.customerRepository.findOne({ where: { _id: new ObjectID(customer_id) } });
+    const condition = { where: { _id: new ObjectID(customer_id) } };
+    const customer: Customer = await this.customerRepository.findOne(condition);
 
     return customer ? true : false;
   }
@@ -68,8 +69,26 @@ export class ProductService {
     return this.productRepository.find();
   }
 
-  findOne(where: object) {
-    return this.productRepository.findOne(where);
+  async findOne(customer_id: string, product_id: string) {
+
+    if (! await this.customerExists(customer_id)) {
+      throw new HttpException("Customer not found!", HttpStatus.NOT_FOUND);
+    }
+
+    const condition = {
+      where: {
+        customer_id: new ObjectID(customer_id),
+        product_catalog_id: product_id
+      }
+    };
+
+    const product: Product = await this.productRepository.findOne(condition);
+
+    if (!product) {
+      throw new HttpException("Product not found!", HttpStatus.NOT_FOUND);
+    }
+
+    return product;
   }
 
   remove(id: string) {

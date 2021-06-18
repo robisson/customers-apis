@@ -38,8 +38,11 @@ export class ProductsController {
 
   @UseGuards(JwtAuthGuard)
   @Get('/:customer_id/favorite-products/:product_id')
-  findOne(@Param('customer_id') customer_id: string) {
-    return this.customerService.findOne({ where: { _id: customer_id } });
+  findOne(
+    @Param('customer_id') customer_id: string,
+    @Param('product_id') product_id: string
+  ) {
+    return this.customerService.findOne(customer_id, product_id);
   }
 
   @Delete('/:customer_id/favorite-products/:product_id')
