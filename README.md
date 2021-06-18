@@ -1,4 +1,4 @@
-# Customers and favorite producs
+# Customers and favorite products
 
 Open source service api to manage customers and favorite produtcs.
 
