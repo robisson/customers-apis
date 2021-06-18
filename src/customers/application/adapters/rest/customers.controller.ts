@@ -1,7 +1,7 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, Query, UseGuards, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Put, Param, Delete, Query, UseGuards, HttpException, HttpStatus, Patch } from '@nestjs/common';
 import { CustomerService } from '../../../domain/services/customer.service';
-import { CreateCustomerDto } from '../../../domain/dto/create-customer.dto';
-import { UpdateCustomerDto } from '../../../domain/dto/update-customer.dto';
+import { CreateCustomerDto } from '../../dto/create-customer.dto';
+import { UpdateCustomerDto } from '../../dto/update-customer.dto';
 import { JwtAuthGuard } from '../../../../auth/guards/jwt-auth.guard';
 import { ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 import { Customer } from '../../../domain/entities/customer.entity';
@@ -44,9 +44,24 @@ export class CustomersController {
     return this.customerService.findOne(customer_id);
   }
 
-  @Put(':id')
-  update(@Param('customer_id') customer_id: string, @Body() updateSolutionDto: UpdateCustomerDto) {
-    return this.customerService.update(+customer_id, updateSolutionDto);
+  @Put(':customer_id')
+  update(@Param('customer_id') customer_id: string, @Body() updateSolutionDto: CreateCustomerDto) {
+
+    if (customer_id.length !== 24) {
+      throw new HttpException("The customer_id must be a tring of 24 characteres", HttpStatus.NOT_ACCEPTABLE);
+    }
+
+    return this.customerService.update(customer_id, updateSolutionDto);
+  }
+
+  @Patch(':customer_id')
+  partialUpdate(@Param('customer_id') customer_id: string, @Body() updateSolutionDto: UpdateCustomerDto) {
+
+    if (customer_id.length !== 24) {
+      throw new HttpException("The customer_id must be a tring of 24 characteres", HttpStatus.NOT_ACCEPTABLE);
+    }
+
+    return this.customerService.update(customer_id, updateSolutionDto);
   }
 
   @Delete(':customer_id')

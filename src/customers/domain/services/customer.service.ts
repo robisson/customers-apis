@@ -2,8 +2,8 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ObjectID } from 'mongodb';
-import { CreateCustomerDto } from '../dto/create-customer.dto';
-import { UpdateCustomerDto } from '../dto/update-customer.dto';
+import { CreateCustomerDto } from '../../application/dto/create-customer.dto';
+import { UpdateCustomerDto } from '../../application/dto/update-customer.dto';
 import { Customer } from '../entities/customer.entity';
 
 @Injectable()
@@ -43,8 +43,21 @@ export class CustomerService {
     return customer
   }
 
-  update(id: number, updateCustomerDto: UpdateCustomerDto) {
-    return `This action updates a #${id} customer`;
+  async update(customer_id: string, updateCustomerDto: UpdateCustomerDto) {
+    const mongoId = new ObjectID(customer_id);
+
+    const customer: Customer = await this.userRepository.findOne({ where: { _id: mongoId } });
+
+    if (!customer) {
+      throw new HttpException("Customer Not Found!", HttpStatus.NOT_FOUND);
+    }
+
+    customer.email = updateCustomerDto.email;
+    customer.name = updateCustomerDto.name;
+
+    await this.userRepository.update(mongoId, customer);
+
+    return customer;
   }
 
   async remove(customer_id: String) {

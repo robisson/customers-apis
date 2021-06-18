@@ -1,7 +1,7 @@
 import { Test } from '@nestjs/testing';
 import { CustomerService } from './customer.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { CreateCustomerDto } from '../dto/create-customer.dto';
+import { CreateCustomerDto } from '../../application/dto/create-customer.dto';
 import { ObjectID } from 'mongodb';
 import { Customer } from '../entities/customer.entity';
 
@@ -10,15 +10,8 @@ describe('Customer Service', () => {
   let findOne: () => {} = jest.fn();
   let find: () => {} = jest.fn();
   let createCustomerDto: CreateCustomerDto = {
-    big_picture: "url_image",
-    customer: "customer",
-    description: "desccription",
-    market: "market",
+    email: "robisson@robissonoliviera.com.br",
     name: "name",
-    project: "project",
-    tags: "tags",
-    team_members: "teams",
-    year_month: "10/2020"
   }
 
   beforeEach(async () => {
