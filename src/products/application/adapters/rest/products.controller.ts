@@ -46,7 +46,10 @@ export class ProductsController {
   }
 
   @Delete('/:customer_id/favorite-products/:product_id')
-  remove(@Param('customer_id') customer_id: string) {
-    return this.customerService.remove(customer_id);
+  remove(
+    @Param('customer_id') customer_id: string,
+    @Param('product_id') product_id: string
+  ) {
+    return this.customerService.remove(customer_id, product_id);
   }
 }
