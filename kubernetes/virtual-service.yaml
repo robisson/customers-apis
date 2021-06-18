@@ -1,0 +1,14 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: customers-ms
+  namespace: customers-dev
+spec:
+  gateways:
+    - customers-backend-ms
+  hosts:
+    - "api.customers.io"
+  http:
+  - route:
+    - destination:
+        host: customers-backend-ms
